@@ -41,7 +41,7 @@ export default function NavBar() {
               </MenuItemLink>
             </Box>
 
-            <MenuItem>User Activity</MenuItem>
+            <MenuItem>User Menu</MenuItem>
           </Toolbar>
         </Container>
       </AppBar>
