@@ -14,18 +14,24 @@ type Activity = {
   isHost: boolean;
   hostId: string;
   hostDisplayName: string;
+  hostImageUrl?: string;
 };
 
-type Profile ={
+type Profile = {
   id: string;
   displayName: string;
   bio?: string;
   imageUrl?: string;
 }
 
-type User ={
-  id:string;
-  email:string;
+type Photo = {
+  id: string;
+  url: string;
+}
+
+type User = {
+  id: string;
+  email: string;
   displayName: string;
   imageUrl?: string;
 }
@@ -46,7 +52,7 @@ type LocationIQSuggestion = {
   address: Address
 }
 
-type LocationIQAddress ={
+type LocationIQAddress = {
   name: string
   house_number: string
   road: string
