@@ -26,4 +26,6 @@ public class Activity
 //configured many to many realationship between User and Activity
     public ICollection<ActivityAttendee> Attendees { get; set; } = [];
 
+    public ICollection<Comment> Comments {get; set;} = [];
+
 }

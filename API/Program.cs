@@ -1,4 +1,5 @@
 using API.MIddleware;
+using API.SignalR;
 using Application.Activities.Commands;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
@@ -62,6 +63,8 @@ builder.Services.AddAuthorization(opt =>
 builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration
 .GetSection("CloudinarySettings"));
+
+builder.Services.AddSignalR();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 var app = builder.Build();
 
@@ -79,6 +82,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapGroup("api").MapIdentityApi<User>(); //api login
+
+app.MapHub<CommentHub>("/comments");
+
+
 //a garbage collector, to dispose things we are done using asap
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
