@@ -1,39 +1,53 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 import { useLocation } from "react-router";
 import { useAccount } from "./useAccount";
+import { useStore } from "./useStore";
 
 export const useActivities = (id?: string) => {
 
+
+    const {activityStore: {filter, startDate}} = useStore();  
     const queryClient = useQueryClient();
     const { currentUser } = useAccount();
     const location = useLocation();
 
-    const { data: activities, isLoading } = useQuery({
+    const { data: activitiesGroup, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery<PagedList<Activity, string>>({
 
-        //fetches thre full list
-        queryKey: ["activities"],
-
+        //fetches thre full list 
+        queryKey: ["activities", filter, startDate],
         //sends a get request to the api to fetch the activities
-        queryFn: async () => {
-            const response = await agent.get<Activity[]>("/activities");
+        queryFn: async ({ pageParam = null }) => {
+            const response = await agent.get<PagedList<Activity, string>>("/activities", {
+                params: {
+                    cursor: pageParam,
+                    pageSize: 3,
+                    filter,
+                    startDate
+                }
+            });
             return response.data;
         },
-
+        staleTime: 1000 * 60 * 5,
+        placeholderData: keepPreviousData,
+        initialPageParam: null,
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
         enabled: !id && location.pathname === '/activities' && !!currentUser,
-        select: data => {
-            return data.map(activity => {
-
-                const host = activity.attendees.find(x => x.id === activity.hostId);
-
-                return {
-                    ...activity,
-                    isHost: currentUser?.id === activity?.hostId,
-                    isGoing: activity?.attendees.some(x => x.id === currentUser?.id),
-                    hostImageUrl: host?.imageUrl,
-                }
-            })
-        }
+        select: (data) => ({
+            ...data,
+            pages: data.pages.map((page) => ({
+                ...page,
+                items: page.items.map(activity => {
+                    const host = activity.attendees.find((x) => x.id === activity.hostId);
+                    return {
+                        ...activity,
+                        isHost: currentUser?.id === activity?.hostId,
+                        isGoing: activity.attendees.some(x => x.id === currentUser?.id),
+                        hostImageUrl: host?.imageUrl
+                    };
+                }),
+            })),
+        })
     });
 
     const { data: activity, isLoading: isLoadingActivity } = useQuery({
@@ -48,7 +62,7 @@ export const useActivities = (id?: string) => {
         //for individual activity
         select: data => {
 
-             const host = data.attendees.find(x => x.id === data.hostId);
+            const host = data.attendees.find(x => x.id === data.hostId);
 
             return {
                 ...data,
@@ -156,13 +170,16 @@ export const useActivities = (id?: string) => {
     })
 
     return {
-        activities,
+        activitiesGroup,
         isLoading,
         updateActivity,
         createActivity,
         deleteActivity,
         activity,
         isLoadingActivity,
-        updateAttendance
+        updateAttendance,
+        fetchNextPage,
+        isFetchingNextPage,
+        hasNextPage
     }
 }

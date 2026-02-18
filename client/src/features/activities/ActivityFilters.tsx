@@ -2,9 +2,14 @@ import { FilterList, Event } from '@mui/icons-material'
 import { Box, ListItemText, MenuItem, MenuList, Paper, Typography } from '@mui/material';
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css";
+import { useStore } from '../../lib/hooks/useStore';
+import { observer } from 'mobx-react-lite';
 
+// we using mobx so we making this component an observer
 
-export default function ActivityFilters() {
+const ActivityFilters = observer(function ActivityFilter() {
+
+    const {activityStore: {setFilter, setStartDate, filter, startDate}} = useStore();
     return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3, borderRadius: 3 }}>
             <Paper sx={{ p: 3, borderRadius: 3 }}>
@@ -14,15 +19,25 @@ export default function ActivityFilters() {
                         Filters
                     </Typography>
                     <MenuList>
-                        <MenuItem>
-                            <ListItemText primary="All events" />
+                        <MenuItem
+                        selected={filter === 'all'}
+                        onClick={() => setFilter('all')}                        
+                        >
+                        
+                        <ListItemText primary="All events" />
                         </MenuItem>
 
-                        <MenuItem>
+                        <MenuItem
+                        selected={filter === 'isGoing'}
+                        onClick={() => setFilter("isGoing")} 
+                        >
                             <ListItemText primary="I'm going" />
                         </MenuItem>
 
-                        <MenuItem>
+                        <MenuItem
+                        selected={filter === 'isHost'}
+                        onClick={() => setFilter('isHost')} 
+                        >
                             <ListItemText primary="I'm hosting" />
                         </MenuItem>
                     </MenuList>
@@ -33,8 +48,14 @@ export default function ActivityFilters() {
                     <Event sx={{ mr: 1 }} />
                     Select date
                 </Typography>
-                <Calendar />
+                <Calendar
+                value={startDate}
+                onChange={date => setStartDate(date as Date)} />
             </Box>
         </Box>
     )
-}
+})
+
+
+
+export default ActivityFilters;
