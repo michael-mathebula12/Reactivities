@@ -24,6 +24,10 @@ export default function MouseHoverPopover({ profile }: Props) {
         <>
             <Avatar
               alt={profile.displayName + 'image'}
+              sx={{
+                border: profile.following ? 3 : 0,
+                borderColor: 'secondary.main'
+              }}
               src={profile.imageUrl}
               component={Link}
               to={`/profiles/${profile.id}`}
