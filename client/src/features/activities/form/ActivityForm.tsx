@@ -37,8 +37,6 @@ export default function ActivityForm() {
   }, [activity, reset])
 
   const onSubmit = async (data: ActivitySchema) => {
-    console.log(data);
-
     //creating a flattened version of the data being passed.
     const{location, ...rest} = data;
     const flattenedData = {...rest, ...location};
@@ -63,7 +61,7 @@ export default function ActivityForm() {
 
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
-      <Typography variant="h5" gutterBottom color="primary">
+    <Typography variant="h5" gutterBottom color="primary">
         {activity ? "Edit activity" : "Create activity"}
       </Typography>
 
@@ -80,7 +78,7 @@ export default function ActivityForm() {
         <LocationInput label="Enter the location" control={control} name="location" />
 
         <Box display="flex" justifyContent="end" gap={3}>
-          <Button color="inherit">Cancel</Button>
+          <Button color="inherit" onClick={() => navigate(-1)}>Cancel</Button>
           {/* onClick={() => {console.log(closeForm); closeForm()}} */}
           <Button type="submit" disabled={updateActivity.isPending || createActivity.isPending} color="success" variant="contained">Submit</Button>
         </Box>

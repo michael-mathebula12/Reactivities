@@ -78,12 +78,16 @@ app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
 app.UseAuthentication();
 app.UseAuthorization();
 
+// app.UseDefaultFiles();
+// app.UseStaticFiles();
 
 app.MapControllers();
 
 app.MapGroup("api").MapIdentityApi<User>(); //api login
 
 app.MapHub<CommentHub>("/comments");
+
+// app.MapFallbackToController("index", "Fallback");
 
 
 //a garbage collector, to dispose things we are done using asap

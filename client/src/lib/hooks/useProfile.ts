@@ -125,6 +125,32 @@ export const useProfile = (id?: string, predicate?: string) => {
         }
     })
 
+    const updateProfile = useMutation({
+        mutationFn: async(editProfile: {displayName: string; bio?: string}) => {
+            await agent.put(`/profiles/editProfile`, editProfile);
+        },
+        onSuccess: async (_, editProfile) => {
+            queryClient.setQueryData(['profile',id], (profile: Profile) =>{
+                
+                if(!profile) return profile;
+
+                return {
+                    ...profile,
+                    displayName: editProfile.displayName,
+                    bio: editProfile.bio
+                };
+            });
+            queryClient.setQueryData(['user'], (user: User) => {
+                if(!user) return user;
+
+                return {
+                    ...user,
+                    displayName: editProfile.displayName
+                }
+            });
+        }
+    });
+
     return {
         profile,
         loadingProfile,
@@ -136,7 +162,8 @@ export const useProfile = (id?: string, predicate?: string) => {
         deletePhoto,
         updateFollowing,
         followings,
-        loadingFollowings
+        loadingFollowings,
+        updateProfile
     }
 }
 
