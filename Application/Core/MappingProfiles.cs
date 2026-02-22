@@ -45,7 +45,7 @@ public class MappingProfiles : Profile
         s.Followers.Any(x => x.Observer.Id == currentUserId)));
 
         //for updating user bio consider mapping the class to a DTO.
-    //handler is a command or query
+        //handler is a command or query
         CreateMap<Comment, CommentDto>()
         .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
         .ForMember(d => d.UserId, o => o.MapFrom(s => s.User.Id))
@@ -54,5 +54,14 @@ public class MappingProfiles : Profile
         CreateMap<EditProfileDto, User>()
         .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
         .ForMember(d => d.Bio, o => o.MapFrom(s => s.Bio));
+
+
+        //dont understand why attendee is the source and dto is the destination
+        CreateMap<ActivityAttendee, UserActivityDto>()
+        .ForMember(d => d.Id, o => o.MapFrom(s => s.Activity.Id))
+        .ForMember(d => d.Title, o => o.MapFrom(s => s.Activity.Title))
+        .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
+        .ForMember(d => d.Date, o => o.MapFrom(s => s.Activity.Date));
+
     }
 }

@@ -1,10 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import agent from "../api/agent";
 import { useMemo } from "react";
+import { useStore } from "./useStore";
 
 export const useProfile = (id?: string, predicate?: string) => {
     const queryClient = useQueryClient();
 
+        const { activityStore: { filter } } = useStore();
+    
     const { data: profile, isLoading: loadingProfile } = useQuery<Profile>({
         queryKey: ['profile', id],
         queryFn: async () => {
@@ -14,7 +17,21 @@ export const useProfile = (id?: string, predicate?: string) => {
         enabled: !!id && !predicate
     })
 
-    //another query
+  //query to retrieve the activities
+    const { data: filteredActivities, isLoading: loadingFilteredActivities } = useQuery<Activity[]>({
+        queryKey: ['activities', id, filter],
+        queryFn: async () => {
+            const response = await agent.get<Activity[]>(`/profiles/${id}/activities?predicate=${filter}`);
+            console.log("Filtered data:", response.data)
+            console.log("Filter:", filter)
+            console.log("ID:", id)
+            return response.data;
+        },
+        enabled: !!id && !!filter,
+        select: data => data
+        
+    });
+
 
     const { data: photos, isLoading: loadingPhotos } = useQuery<Photo[]>({
         queryKey: ['photos', id],
@@ -163,7 +180,9 @@ export const useProfile = (id?: string, predicate?: string) => {
         updateFollowing,
         followings,
         loadingFollowings,
-        updateProfile
+        updateProfile,
+         filteredActivities,
+        loadingFilteredActivities
     }
 }
 

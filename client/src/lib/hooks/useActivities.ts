@@ -8,7 +8,7 @@ import type { FieldValues } from "react-hook-form";
 export const useActivities = (id?: string) => {
 
 
-    const {activityStore: {filter, startDate}} = useStore();  
+    const { activityStore: { filter, startDate } } = useStore();
     const queryClient = useQueryClient();
     const { currentUser } = useAccount();
     const location = useLocation();
@@ -75,13 +75,16 @@ export const useActivities = (id?: string) => {
         }
     })
 
+
+  
+
     const updateActivity = useMutation({
         mutationFn: async (activity: FieldValues) => {
             await agent.put(`/activities/${activity.id}`, activity)
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: ['activities',activity?.id]
+                queryKey: ['activities', activity?.id]
 
             })
         }
@@ -181,6 +184,6 @@ export const useActivities = (id?: string) => {
         updateAttendance,
         fetchNextPage,
         isFetchingNextPage,
-        hasNextPage
+        hasNextPage,
     }
 }

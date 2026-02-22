@@ -4,6 +4,7 @@ import { useProfile } from "../../lib/hooks/useProfile";
 import { useState } from "react";
 import PhotoUploadWidget from "../../app/shared/components/PhotoUploadWidget";
 import StarButton from "../../app/shared/components/StarButton";
+import DeleteButton from "../../app/shared/components/DeleteButton";
 // import DeleteButton from "../../app/shared/components/DeleteButton";
 
 export default function ProfilePhotos() {
@@ -67,7 +68,7 @@ export default function ProfilePhotos() {
                                         loading="lazy"
                                     />
                                     {isCurrentUser && (
-                                        <div>
+                                        <>
                                             <Box
                                                 sx={{ position: 'absolute', top: 0, left: 0 }}
                                                 onClick={() => setMainPhoto.mutate(item)}>
@@ -75,15 +76,13 @@ export default function ProfilePhotos() {
                                             </Box>
                                             {profile?.imageUrl !== item.url && (
                                                 <Box
-                                                    sx={{ position: 'absolute', top: 0, left: 0 }}
+                                                    sx={{ position: 'absolute', top: 0, right: 0 }}
                                                     onClick={() => deletePhoto.mutate(item.id)}
                                                 >
-
-                                                    {/* //undo this button but it overlaps with the star button */}
-                                                    {/* <DeleteButton /> */}
+                                                <DeleteButton />
                                                 </Box>
                                             )}
-                                        </div>
+                                        </>
                                     )}
                                 </ImageListItem>
                             ))}

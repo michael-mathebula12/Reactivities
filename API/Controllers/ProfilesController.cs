@@ -1,3 +1,4 @@
+using Application.Activities.Queries;
 using Application.Profiles;
 using Application.Profiles.Commands;
 using Application.Profiles.DTOs;
@@ -57,6 +58,12 @@ public class ProfilesController : BaseApiController
     public async Task<ActionResult> EditUserProfile(EditProfileDto profileDto)
     {
         return HandleResult(await Mediator.Send(new EditProfile.Command{ProfileDto = profileDto}));
+    }
+
+    [HttpGet("{userId}/activities")]
+    public async Task<ActionResult<List<UserActivityDto>>> GetFilteredUserActivities(string userId, [FromQuery]ActivityParams activityParams)
+    {
+        return HandleResult(await Mediator.Send(new GetUserActivities.Query{UserId = userId,Params = activityParams}));
     }
 
 }

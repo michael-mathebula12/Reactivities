@@ -29,7 +29,6 @@
     <Folder Include="Activities\Validators\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Profiles\Commands\" />
-    <Folder Include="Profiles\DTOs\" />
     <Folder Include="Profiles\Validators\" />
   </ItemGroup>
 
