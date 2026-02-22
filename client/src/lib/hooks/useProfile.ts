@@ -1,12 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import agent from "../api/agent";
 import { useMemo } from "react";
-import { useStore } from "./useStore";
 
 export const useProfile = (id?: string, predicate?: string) => {
     const queryClient = useQueryClient();
-
-        const { activityStore: { filter } } = useStore();
     
     const { data: profile, isLoading: loadingProfile } = useQuery<Profile>({
         queryKey: ['profile', id],
@@ -18,16 +15,17 @@ export const useProfile = (id?: string, predicate?: string) => {
     })
 
   //query to retrieve the activities
+//   only enabled when on events tab
     const { data: filteredActivities, isLoading: loadingFilteredActivities } = useQuery<Activity[]>({
-        queryKey: ['activities', id, filter],
+        queryKey: ['activities', id, predicate],
         queryFn: async () => {
-            const response = await agent.get<Activity[]>(`/profiles/${id}/activities?predicate=${filter}`);
+            const response = await agent.get<Activity[]>(`/profiles/${id}/activities?filter=${predicate}`);
             console.log("Filtered data:", response.data)
-            console.log("Filter:", filter)
+            console.log("Filter:", predicate)
             console.log("ID:", id)
             return response.data;
         },
-        enabled: !!id && !!filter,
+        enabled: !!id && !!predicate,
         select: data => data
         
     });

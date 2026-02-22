@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite';
 
 const ActivityFilters = observer(function ActivityFilter() {
 
-    const {activityStore: {setFilter, setStartDate, filter, startDate}} = useStore();
+    const { activityStore: { setFilter, setStartDate, filter, startDate } } = useStore();
     return (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3, borderRadius: 3 }}>
             <Paper sx={{ p: 3, borderRadius: 3 }}>
@@ -20,23 +20,23 @@ const ActivityFilters = observer(function ActivityFilter() {
                     </Typography>
                     <MenuList>
                         <MenuItem
-                        selected={filter === 'all'}
-                        onClick={() => setFilter('all')}                        
+                            selected={filter === 'all'}
+                            onClick={() => setFilter('all')}
                         >
-                        
-                        <ListItemText primary="All events" />
+
+                            <ListItemText primary="All events" />
                         </MenuItem>
 
                         <MenuItem
-                        selected={filter === 'isGoing'}
-                        onClick={() => setFilter("isGoing")} 
+                            selected={filter === 'isGoing'}
+                            onClick={() => setFilter("isGoing")}
                         >
                             <ListItemText primary="I'm going" />
                         </MenuItem>
 
                         <MenuItem
-                        selected={filter === 'isHost'}
-                        onClick={() => setFilter('isHost')} 
+                            selected={filter === 'isHost'}
+                            onClick={() => setFilter('isHost')}
                         >
                             <ListItemText primary="I'm hosting" />
                         </MenuItem>
@@ -49,8 +49,8 @@ const ActivityFilters = observer(function ActivityFilter() {
                     Select date
                 </Typography>
                 <Calendar
-                value={startDate}
-                onChange={date => setStartDate(date as Date)} />
+                    value={startDate}
+                    onChange={date => setStartDate(date as Date)} />
             </Box>
         </Box>
     )

@@ -20,7 +20,7 @@ export default function ProfileContent() {
   const tabContent = [
     { label: 'About', content: <div><ProfileAbout/></div> },
     { label: 'Photos', content: <ProfilePhotos />},
-    { label: 'Events', content: <ProfileActivities /> },
+    { label: 'Events', content: <ProfileActivities  /> },
     { label: 'Followers', content: <ProfileFollowings activeTab={value} /> },
     { label: 'Following', content: <ProfileFollowings activeTab={value} /> },
 
